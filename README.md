@@ -8,9 +8,6 @@ This tool reads Java and C++ code, exports its
 - Data Flow Graph
 - Abstract Syntax tree
 
-## DISCLAIMER!
-
-Our work is currently focused on the C language. Everything SHOULD work with Java as well, but we have not tested it thoroughly yet.
 
 ## Build
 
