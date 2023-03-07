@@ -1,0 +1,20 @@
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss,SSS} %-5p %C{1} %m%n"/>
+            <ThresholdFilter level="DEBUG"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger level="ERROR" name="de.fraunhofer.aisec"/>
+        <Root level="ERROR">
+            <!--<AppenderRef ref="STDOUT"/>-->
+        </Root>
+        
+
+        <Logger name="com.thecout.cpg" level="info" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
+    </Loggers>
+</Configuration>

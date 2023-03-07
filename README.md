@@ -1,41 +1,98 @@
-# SAP-samples/repository-template
-This default template for SAP Samples repositories includes files for README, LICENSE, and .reuse/dep5. All repositories on github.com/SAP-samples will be created based on this template.
+# Code Property Graph to Dot
 
-# Containing Files
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/security-research-taintgraphs)](https://api.reuse.software/info/github.com/SAP-samples/security-research-taintgraphs)
 
-1. The LICENSE file:
-In most cases, the license for SAP sample projects is `Apache 2.0`.
 
-2. The .reuse/dep5 file: 
-The [Reuse Tool](https://reuse.software/) must be used for your samples project. You can find the .reuse/dep5 in the project initial. Please replace the parts inside the single angle quotation marks < > by the specific information for your repository.
+This tool reads Java and C++ code, exports its
+- Control Flow Graph
+- Data Flow Graph
+- Abstract Syntax tree
 
-3. The README.md file (this file):
-Please edit this file as it is the primary description file for your project. You can find some placeholder titles for sections below.
+## DISCLAIMER!
 
-# [Title]
-<!-- Please include descriptive title -->
+Our work is currently focused on the C language. Everything SHOULD work with Java as well, but we have not tested it thoroughly yet.
 
-<!--- Register repository https://api.reuse.software/register, then add REUSE badge:
-[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/REPO-NAME)](https://api.reuse.software/info/github.com/SAP-samples/REPO-NAME)
--->
+## Build
 
-## Description
-<!-- Please include SEO-friendly description -->
+Build using Gradle
+
+```
+./gradlew installDist
+```
+
+## Recommended Database
+
+We find that Memgraph has the most efficient performance. Comparing Neo4J and Memgraph
+```
+docker pull memgraph/memgraph-platform
+docker image tag memgraph/memgraph-platform memgraph
+docker run --memory="15g" -it -p 7687:7687 -p 3000:3000 -e MEMGRAPH="--query-execution-timeout-sec=180000 --bolt-session-inactivity-timeout=1800000 --query-max-plans=100000 --log-level DEBUG --memory-limit=15000 --storage-wal-enabled=false --storage-snapshot-interval-sec=0" memgraph
+```
+
+## Modes
+
+### Pathsextraction
+Export paths between user-controlled sources and sinks with intersections between Gitdiff changes:
+
+This mode needs a running cypherql capable database up and running, e.g.:
+```
+╰─ build/install/cpg-to-dot/bin/cpg-to-dot --gitFile data/libxml2_git.txt --host localhost --port 7687 --protocol bolt --output out
+```
+The above command will use a graph database accessible via Bolt. 
+
+The extracted paths will be written to %out% directory with the pattern %out%/%commit%.cpg
+
+The git text file should have following format:
+```
+http://GITREPO/URL
+FIRST INISTAL COMMIT
+Commit that fixed vulnerability #1
+Commit that fixed vulnerability #2
+...
+Commit that fixed vulnerability #n
+```
+
+### Load CPG to DB
+This mode will load a path to a project into a graph database.
+```
+╰─ build/install/cpg-to-dot/bin/cpg-to-dot --file path/to/project --host localhost --port 7687 --protocol redis
+```
+
+### Simply export a CPG as Dot
+```
+╰─ build/install/cpg-to-dot/bin/cpg-to-dot --file path/to/project --output out
+```
+
+## Example output
+(Old image)
+```Java
+public class Implementor1  {
+
+    private final static int i = 6;
+
+    public static void main( String... args ) {
+        final int j;
+        j = 14;
+        System.out.println(j);
+    }
+}
+```
+
+![visualized dot](example.png "visualized dot example")
+
 
 ## Requirements
 
-## Download and Installation
+The application requires Java 11 or higher.
 
-## Known Issues
-<!-- You may simply state "No known issues. -->
+## Optional commands
 
-## How to obtain support
-[Create an issue](https://github.com/SAP-samples/<repository-name>/issues) in this repository if you find a bug or have questions about the content.
- 
-For additional support, [ask a question in SAP Community](https://answers.sap.com/questions/ask.html).
+```
+--tmpPath <Path to a temporary folder used for Git>
+```
 
-## Contributing
-If you wish to contribute code, offer fixes or improvements, please send a pull request. Due to legal reasons, contributors will be asked to accept a DCO when they create the first pull request to this project. This happens in an automated fashion during the submission process. SAP uses [the standard DCO text of the Linux Foundation](https://developercertificate.org/).
+### Uses
 
-## License
-Copyright (c) 2023 SAP SE or an SAP affiliate company. All rights reserved. This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.
+Thanks to Fraunhofer AISEC for:
+- https://github.com/Fraunhofer-AISEC/cpg-vis-neo4j
+- https://github.com/Fraunhofer-AISEC/cpg
