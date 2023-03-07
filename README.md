@@ -14,6 +14,7 @@ This tool reads Java and C++ code, exports its
 Build using Gradle
 
 ```
+git clone https://github.com/SAP-samples/security-research-taintgraphs cpg-to-dot
 ./gradlew installDist
 ```
 
