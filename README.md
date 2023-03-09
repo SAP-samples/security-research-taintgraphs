@@ -8,6 +8,10 @@ This tool reads Java and C++ code, exports its
 - Data Flow Graph
 - Abstract Syntax tree
 
+## Requirements
+
+- Kotlin 1.5.10
+- JVM >= 11
 
 ## Build
 
