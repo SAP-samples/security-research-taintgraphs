@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: <YOUR-REPO-NAME>
-Upstream-Contact: <YOUR-CONTACT (MAIL ADDRESS ETC.)>
+Upstream-Name: security-research-taingraphs
+Upstream-Contact: tom.ganz@sap.com
 Source: <https://github.com/sap-samples/YOUR-REPO-NAME>
 Disclaimer: The code in this project may include calls to APIs ("API Calls") of
  SAP or third-party products or services developed outside of this project
