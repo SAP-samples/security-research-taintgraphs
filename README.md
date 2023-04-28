@@ -19,6 +19,7 @@ Build using Gradle
 
 ```
 git clone https://github.com/SAP-samples/security-research-taintgraphs cpg-to-dot
+cd cpg-to-dot
 ./gradlew installDist
 ```
 
