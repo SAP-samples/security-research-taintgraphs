@@ -1,4 +1,4 @@
-# Code Property Graph to Dot
+# Taintgraph Extraction
 
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/security-research-taintgraphs)](https://api.reuse.software/info/github.com/SAP-samples/security-research-taintgraphs)
 
