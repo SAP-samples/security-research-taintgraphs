@@ -152,5 +152,5 @@ optimizer = Adam(model.parameters(), lr=0.0001)
 for epoch in range(1, 100):
     train_loss, loss_c, loss_o, loss_co, train_acc = train(model, optimizer, train_loader, "cpu")
     test_acc, test_acc_c, test_acc_o = eval_acc(model, test_loader, "cpu")
-    print("train stuff", train_loss, loss_c, loss_o, loss_co, train_acc)
-    print("test stuff", test_acc, test_acc_c, test_acc_o)
+    print("training performance Loss: ", train_loss, " Accuracy: ", train_acc)
+    print("test Accuracy: ", test_acc)
