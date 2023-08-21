@@ -11,7 +11,7 @@ The training and data preprocessing pipeline may also take a while.
 
 ## Install
 
-We used Python@3.8 on a Mac os X and Ubuntu EC2 instance.
+We used Python@3.8 on a MacBook Pro 2020 and Ubuntu g4dn EC2 instance.
 
 - Install Python requirements
 ```
@@ -30,7 +30,7 @@ unzip dataset.zip
 
 ## Run the model
 
-Running the preprocessing and training steo via:
+Running the preprocessing and training step via:
 ```
 python3.8 main.py
 ```
