@@ -1,1 +1,1 @@
-# Cache folder for preprocessed CPGs
+# Cache folder for preprocessed Taint graphs
