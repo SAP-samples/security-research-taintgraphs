@@ -26,7 +26,7 @@ pip3 install -r requirements.txt
 ```
 cd data
 unzip dataset.zip
-``
+```
 
 ## Run the model
 
