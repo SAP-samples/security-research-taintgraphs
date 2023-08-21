@@ -1,6 +1,6 @@
 # PAVUDI Model and Data
 
-Here lies the PAVUDI model and FFmpeg and QEMU data for the paper "PAVUDI: Patch-based Vulnerability Discovery
+Here lies the PAVUDI model and dataset for the paper "PAVUDI: Patch-based Vulnerability Discovery
 using Machine Learning" submitted to the ACSAC'23 conference.
 
 PAVUDI is a causal graph isomorphism network trained on tained graphs to detect vulnerabilities inside patches.
@@ -8,6 +8,7 @@ PAVUDI is a causal graph isomorphism network trained on tained graphs to detect 
 Disclaimer: 
 The data extraction takes some time, hence we publish the dataset here containing the FFmpeg and QEMU taintgraphs.
 The training and data preprocessing pipeline may also take a while.
+
 
 ## Install
 
@@ -41,4 +42,14 @@ effectively loads the data, preprocesses (and caches) it and finally trains and 
 
 The taint graphs can be extracted from the parent project. We recommend using the Memgraph database.
 Follow the instruction from the readme from the parent directory and use the respective ffmpeg.txt or qemu.txt from the data folder.
+
+## Content
+- .. : Taintgraph Extraction Tool
+- data/ : Dataset (FFmpeg + QEMU)
+- cache/ : Cache Folder for preprocessed data
+- main.py : Training and Evaluation Script
+- model.py : Model Structure
+- causalmodel.py : CGIN Implementation
+- requirements.txt : needed Python libs
+- word2vec.py : Word2Vec model management
 
