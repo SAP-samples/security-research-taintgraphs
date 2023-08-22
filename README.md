@@ -34,7 +34,7 @@ docker run --memory="15g" -it -p 7687:7687 -p 3000:3000 -e MEMGRAPH="--query-exe
 
 ## Modes
 
-### Pathsextraction
+### Paths/Taintgraph extraction
 Export paths between user-controlled sources and sinks with intersections between Gitdiff changes:
 
 This mode needs a running cypherql capable database up and running, e.g.:
