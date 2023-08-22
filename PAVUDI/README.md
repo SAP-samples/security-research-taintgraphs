@@ -3,10 +3,10 @@
 Here lies the PAVUDI model and dataset for the paper "PAVUDI: Patch-based Vulnerability Discovery
 using Machine Learning" submitted to the ACSAC'23 conference.
 
-PAVUDI is a causal graph isomorphism network trained on tained graphs to detect vulnerabilities inside patches.
+PAVUDI is a causal graph isomorphism network trained on taint graphs to detect vulnerabilities inside patches.
 
 Disclaimer: 
-The data extraction takes some time, hence we publish the dataset here containing the FFmpeg and QEMU taintgraphs.
+The data extraction takes some time, hence we publish the dataset here containing the FFmpeg and QEMU taint graphs.
 The training and data preprocessing pipeline may also take a while.
 
 
