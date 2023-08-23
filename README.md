@@ -25,7 +25,8 @@ cd cpg-to-dot
 
 ## Recommended Database
 
-We find that Memgraph has the most efficient performance. Comparing Neo4J and Memgraph
+We find that Memgraph has the most efficient performance. Comparing RedisGraph, Neo4J and Memgraph.
+The running command for Memgraph is slightly optimized to trade transactions guarantees for speed.
 ```
 docker pull memgraph/memgraph-platform
 docker image tag memgraph/memgraph-platform memgraph
@@ -42,10 +43,11 @@ This mode needs a running cypherql capable database up and running, e.g.:
 ╰─ build/install/cpg-to-dot/bin/cpg-to-dot --gitFile data/libxml2_git.txt --host localhost --port 7687 --protocol bolt --output out
 ```
 The above command will use a graph database accessible via Bolt. 
-
 The extracted paths will be written to %out% directory with the pattern %out%/%commit%.cpg
 
-The git text file should have following format:
+The git text file should have following format, but mind it is best advise to sort the commits by time. The extraction tool only updates Deltas for efficiency. The initial commit should be close to the first vulnerable commit, regarding the committing date.
+
+
 ```
 http://GITREPO/URL
 FIRST INISTAL COMMIT
