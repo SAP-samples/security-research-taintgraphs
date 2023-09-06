@@ -82,7 +82,7 @@ for data in graphs:
     lower = [int(x!="\"EMPTY_STRING\"") for x in data.lowerBound]
     data.x = torch.cat((data.x, torch.tensor(upper).view(-1,1),torch.tensor(lower).view(-1,1)), 1)
 
-# 80/20 Split for the dataset
+# 70/20 Split for the dataset
 np.random.shuffle(graphs)
 train_loader = DataLoader(graphs[:int(len(graphs)*70/100)], 4, shuffle=True)
 test_loader = DataLoader(graphs[int(len(graphs)*70/100):], 1, shuffle=False)
@@ -148,13 +148,13 @@ def eval_acc(model, loader, device):
     acc_o = correct_o / len(loader.dataset)
     return acc_co, acc_c, acc_o
 
+# Train PAVUDI
 optimizer = Adam(model.parameters(), lr=0.0001)
 for epoch in range(1, 10):
     train_loss, loss_c, loss_o, loss_co, train_acc = train(model, optimizer, train_loader, "cpu")
     test_acc, test_acc_c, test_acc_o = eval_acc(model, test_loader, "cpu")
 print("The Model is trained and saved under model.model, the stats are:")
-print("train stuff", train_loss, loss_c, loss_o, loss_co, train_acc)
-print("test stuff", test_acc, test_acc_c, test_acc_o)
-
+print("training performance Loss: ", train_loss, " Accuracy: ", train_acc)
+print("test Accuracy: ", test_acc)
 
 torch.save(model, "model.model")
