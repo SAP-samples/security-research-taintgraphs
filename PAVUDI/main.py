@@ -57,6 +57,7 @@ ast = ASTEncoder({"cache_dir": "data"})
 ast.build_astdict()
 
 # Load the samples
+print("Loading samples, this may take a while but will be cached")
 graphs = []
 def loadfile(g, label):
     name = g.split("/")[-1]
@@ -70,6 +71,7 @@ def loadfile(g, label):
             pickle.dump(graphobj, fp)
         return graphobj
 
+print("Collecting dataset")
 for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(dataset))):
     graphs.append(loadfile(g, 0))
     
@@ -77,6 +79,7 @@ for g in tqdm(glob.glob("data/{}/vuln/*.cpg".format(dataset))):
     graphs.append(loadfile(g, 1))
 
 # Initialize the bound information: If lower/upper bound has no information == 0 otherwise 1
+print("Adding bound information")
 for data in graphs:    
     upper = [int(x!="\"EMPTY_STRING\"") for x in data.upperBound]
     lower = [int(x!="\"EMPTY_STRING\"") for x in data.lowerBound]
@@ -149,6 +152,7 @@ def eval_acc(model, loader, device):
     return acc_co, acc_c, acc_o
 
 # Train PAVUDI
+print("Start Training")
 optimizer = Adam(model.parameters(), lr=0.0001)
 for epoch in range(1, 10):
     train_loss, loss_c, loss_o, loss_co, train_acc = train(model, optimizer, train_loader, "cpu")

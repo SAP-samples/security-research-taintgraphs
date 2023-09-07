@@ -9,6 +9,14 @@ Disclaimer:
 The data extraction takes some time, hence we publish the dataset here containing the FFmpeg and QEMU taint graphs.
 The training and data preprocessing pipeline may also take a while.
 
+## Run via Docker
+
+To train and evaluate the model using a docker instance simply use:
+
+```
+docker build . -t pavudi
+docker run pavudi
+```
 
 ## Install
 
@@ -18,7 +26,7 @@ We used Python@3.8 on a MacBook Pro 2020 and Ubuntu g4dn EC2 instance.
 ```
 python3.8 -m venv env
 source env/bin/activate
-pip3 install torch==1.13.1
+pip3 install torch==1.13.1  --index-url https://download.pytorch.org/whl/cpu
 pip3 install -r requirements.txt
 ```
 
