@@ -1,23 +1,23 @@
-from model import get_classification_model
-from word2vec import Word2VecBuilder
-from dataloader import ASTEncoder, load
-from torch_geometric.data import DataLoader
 import glob
-from tqdm import tqdm
-import torch.nn.functional as F
-import torch
 import os
 import pickle
+
 import numpy as np
+import torch
+import torch.nn.functional as F
 from torch.optim import Adam
-from torch_geometric.data import DataLoader, DenseDataLoader as DenseLoader
-from torch_geometric.data import Batch
+from torch_geometric.data import DataLoader
+from tqdm import tqdm
+
+from dataloader import ASTEncoder, load
+from model import get_classification_model
+from word2vec import Word2VecBuilder
 
 # Which dataset? ffmpeg or qemu
 dataset = "ffmpeg"
 
 # Set up hyperparameters for the model as outlined in the paper
-BASELINE_GIN_CLASSIFIER = {
+GIN_CLASSIFIER = {
     "type": "GraphClassifier",
     "name": "BASELINE_GIN",
     "features": 152,
@@ -40,8 +40,10 @@ BASELINE_GIN_CLASSIFIER = {
         "num_layers": 3
     }
 }
+LR = 0.0001
+EPOCHS = 10
 
-model = get_classification_model(BASELINE_GIN_CLASSIFIER).encoder.node_level_encoder
+model = get_classification_model(GIN_CLASSIFIER).encoder.node_level_encoder
 
 # Configure the word2vec embedding
 w2v = Word2VecBuilder({
@@ -153,8 +155,8 @@ def eval_acc(model, loader, device):
 
 # Train PAVUDI
 print("Start Training")
-optimizer = Adam(model.parameters(), lr=0.0001)
-for epoch in range(1, 10):
+optimizer = Adam(model.parameters(), lr=LR)
+for epoch in range(1, EPOCHS):
     train_loss, loss_c, loss_o, loss_co, train_acc = train(model, optimizer, train_loader, "cpu")
     test_acc, test_acc_c, test_acc_o = eval_acc(model, test_loader, "cpu")
 print("The Model is trained and saved under model.model, the stats are:")

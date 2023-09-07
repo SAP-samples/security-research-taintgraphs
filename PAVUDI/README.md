@@ -75,6 +75,48 @@ training performance Loss:  0.39560627199108195  Accuracy:  0.7788559754851889
 test Accuracy:  0.821917808219178
 ```
 
+# Configuration and Parameters
+
+First of all in the beginning of main.py we can define all model training specific parameters:
+```
+GIN_CLASSIFIER = {
+    "type": "GraphClassifier",
+    "name": "BASELINE_GIN",
+    "features": 152,
+    "classes": 1,
+    "encoder": {
+        "type": "GraphComposite",
+        "pooling": {
+            "type": "sum"
+        },
+        "encoder": {
+            "num_layers": 3,
+            "hidden_channels": 128,
+            "layer_type": "CGIN",
+            "norm_type": "None"
+        }
+    },
+    "classifier": {
+        "layer_type": "MLP",
+        "dropout": 0.5,
+        "num_layers": 3
+    }
+}
+LR = 0.0001
+EPOCHS = 10
+```
+
+It uses 
+- 152 features: 100 W2V Embedding Size, 50 Abstract Syntrax Label Encoding and 2 boolean feature for bounds. These are fix!
+- 3 Graph Isomorphism Networks (GIN Layers) followed by the Causal GIN Layer as outlined in the paper.
+- We use a sum-Pooling which can be replaced by "max" or "mean" to pool the graph nodes to a single feature space
+- no layer normalization. However, "norm_type": "BatchNorm" and "norm_type": "GraphNorm" for batch and graph normalization would be possible as well.
+- 128 hidden_channels
+- Classifier uses an MLP (no other choice right now)
+- dropout of 0.5
+- 3 MLP layers
+
+
 # Analyzing new Datasets
 
 The taint graphs can be extracted from the parent project. We recommend using the Memgraph database.
