@@ -109,6 +109,7 @@ EPOCHS = 10
 It uses 
 - 152 features: 100 W2V Embedding Size, 50 Abstract Syntrax Label Encoding and 2 boolean feature for bounds. Don't change These!
 - 3 Graph Isomorphism Networks (GIN Layers) followed by the Causal GIN Layer as outlined in the paper.
+- CGIN is the layer type and can only be replaced by "GIN" without the causal structure learning part.
 - We use a sum-Pooling which can be replaced by "max" or "mean" to pool the graph nodes to a single feature space
 - no layer normalization. However, "norm_type": "BatchNorm" and "norm_type": "GraphNorm" for batch and graph normalization would be possible as well.
 - 128 hidden_channels
