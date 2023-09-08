@@ -122,7 +122,13 @@ It uses
 
 The taint graphs can be extracted from the parent project.
 - Install the parent project as in https://github.com/SAP-samples/security-research-taintgraphs
-- You need a text file e.g. qemu.txt
+Assuming you are in security-research-taintgraphs/PAVUDI
+```
+cd ../
+./gradlew installDist
+cd PAVUDI
+```
+- You need a text file e.g. newdataset.txt
 - The content should be in the following format:
 ```
 REPO URL
