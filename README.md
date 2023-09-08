@@ -18,8 +18,8 @@ This tool reads Java and C++ code, exports its
 Build using Gradle
 
 ```
-git clone https://github.com/SAP-samples/security-research-taintgraphs cpg-to-dot
-cd cpg-to-dot
+git clone https://github.com/SAP-samples/security-research-taintgraphs
+cd security-research-taintgraphs
 ./gradlew installDist
 ```
 
@@ -40,7 +40,7 @@ Export paths between user-controlled sources and sinks with intersections betwee
 
 This mode needs a running cypherql capable database up and running, e.g.:
 ```
-╰─ build/install/cpg-to-dot/bin/cpg-to-dot --gitFile data/libxml2_git.txt --host localhost --port 7687 --protocol bolt --output out
+╰─ build/install/security-research-taintgraphs/bin/security-research-taintgraphs --gitFile data/libxml2_git.txt --host localhost --port 7687 --protocol bolt --output out
 ```
 The above command will use a graph database accessible via Bolt. 
 The extracted paths will be written to %out% directory with the pattern %out%/%commit%.cpg
@@ -60,12 +60,12 @@ Commit that fixed vulnerability #n
 ### Load CPG to DB
 This mode will load a path to a project into a graph database.
 ```
-╰─ build/install/cpg-to-dot/bin/cpg-to-dot --file path/to/project --host localhost --port 7687 --protocol redis
+╰─ build/install/security-research-taintgraphs/bin/security-research-taintgraphs --file path/to/project --host localhost --port 7687 --protocol redis
 ```
 
 ### Simply export a CPG as Dot
 ```
-╰─ build/install/cpg-to-dot/bin/cpg-to-dot --file path/to/project --output out
+╰─ build/install/security-research-taintgraphs/bin/security-research-taintgraphs --file path/to/project --output out
 ```
 
 ## Example output
