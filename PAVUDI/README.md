@@ -120,9 +120,32 @@ It uses
 
 # Analyzing new Datasets
 
-The taint graphs can be extracted from the parent project. We recommend using the Memgraph database.
-Follow the instruction from the readme from the parent directory and use the respective ffmpeg.txt or qemu.txt from the data folder.
-
+The taint graphs can be extracted from the parent project.
+- Install the parent project as in https://github.com/SAP-samples/security-research-taintgraphs
+- You need a text file e.g. qemu.txt
+- The content should be in the following format:
+```
+REPO URL
+INITIAL COMMIT
+Commit that fixed vulnerability #1
+Commit that fixed vulnerability #2
+...
+Commit that fixed vulnerability #n
+...
+```
+The commits should be ordered by time
+- Set up the database, e.g.
+```
+docker pull memgraph/memgraph-platform
+docker image tag memgraph/memgraph-platform memgraph
+docker run --memory="15g" -it -p 7687:7687 -p 3000:3000 -e MEMGRAPH="--query-execution-timeout-sec=180000 --bolt-session-inactivity-timeout=1800000 --query-max-plans=100000 --log-level DEBUG --memory-limit=15000 --storage-wal-enabled=false --storage-snapshot-interval-sec=0" memgraph
+```
+- Extract the taint graphs:
+```
+mkdir data/newdataset
+build/install/security-research-taintgraphs/bin/security-research-taintgraphs --gitFile data/qemu.txt --host localhost --port 7687 --protocol bolt --output data
+``` 
+- Then configure the dataset in main.py and replace ffmpeg by newdataset 
 # Content
 - .. : Taintgraph Extraction Tool
 - data/ : Dataset (FFmpeg + QEMU)
