@@ -30,8 +30,8 @@ from torch_geometric.data import DataLoader, DenseDataLoader as DenseLoader
 from torch_geometric.data import Batch
 >>>>>>> f2b94c9 (added PAVUDI)
 
-# Which dataset? ffmpeg or qemu
-dataset = "ffmpeg"
+trainset = "ffmpeg" #ffmpeg or qemu
+testset = "ffmpeg" # ffmpeg qemu libxml2 tinyproxy curl openssl or libxml2
 
 # Set up hyperparameters for the model as outlined in the paper
 <<<<<<< HEAD
@@ -87,9 +87,14 @@ ast.build_astdict()
 # Load the samples
 <<<<<<< HEAD
 print("Loading samples, this may take a while but will be cached")
+<<<<<<< HEAD
 =======
 >>>>>>> f2b94c9 (added PAVUDI)
 graphs = []
+=======
+traingraphs = []
+testgraphs = []
+>>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
 def loadfile(g, label):
     name = g.split("/")[-1]
     if os.path.exists("cache/"+name):
@@ -104,24 +109,52 @@ def loadfile(g, label):
 
 <<<<<<< HEAD
 print("Collecting dataset")
+<<<<<<< HEAD
 =======
 >>>>>>> f2b94c9 (added PAVUDI)
 for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(dataset))):
     graphs.append(loadfile(g, 0))
+=======
+for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(trainset))):
+    traingraphs.append(loadfile(g, 0))
+>>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
     
-for g in tqdm(glob.glob("data/{}/vuln/*.cpg".format(dataset))):
-    graphs.append(loadfile(g, 1))
+for g in tqdm(glob.glob("data/{}/vuln/*.cpg".format(trainset))):
+    traingraphs.append(loadfile(g, 1))
+
+if not trainset == testset:
+    for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(testset))):
+        testgraphs.append(loadfile(g, 0))
+    
+    for g in tqdm(glob.glob("data/{}/vuln/*.cpg".format(testset))):
+        testgraphs.append(loadfile(g, 1))
+    train_loader = DataLoader(traingraphs, 4, shuffle=True)
+    test_loader = DataLoader(testgraphs, 1, shuffle=False)
+else:
+    # 70/20 Split for the dataset
+    np.random.shuffle(traingraphs)
+    train_loader = DataLoader(traingraphs[:int(len(graphs)*70/100)], 4, shuffle=True)
+    test_loader = DataLoader(traingraphs[int(len(graphs)*70/100):], 1, shuffle=False)
 
 # Initialize the bound information: If lower/upper bound has no information == 0 otherwise 1
 <<<<<<< HEAD
 print("Adding bound information")
+<<<<<<< HEAD
 =======
 >>>>>>> f2b94c9 (added PAVUDI)
 for data in graphs:    
+=======
+for data in traingraphs:    
+    upper = [int(x!="\"EMPTY_STRING\"") for x in data.upperBound]
+    lower = [int(x!="\"EMPTY_STRING\"") for x in data.lowerBound]
+    data.x = torch.cat((data.x, torch.tensor(upper).view(-1,1),torch.tensor(lower).view(-1,1)), 1)
+for data in testgraphs:    
+>>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
     upper = [int(x!="\"EMPTY_STRING\"") for x in data.upperBound]
     lower = [int(x!="\"EMPTY_STRING\"") for x in data.lowerBound]
     data.x = torch.cat((data.x, torch.tensor(upper).view(-1,1),torch.tensor(lower).view(-1,1)), 1)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # 70/20 Split for the dataset
 =======
@@ -130,6 +163,8 @@ for data in graphs:
 np.random.shuffle(graphs)
 train_loader = DataLoader(graphs[:int(len(graphs)*70/100)], 4, shuffle=True)
 test_loader = DataLoader(graphs[int(len(graphs)*70/100):], 1, shuffle=False)
+=======
+>>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
 
 def train(model, optimizer, loader, device):
     # Training Loop

@@ -12,6 +12,21 @@ The training and data preprocessing pipeline may also take a while.
 
 # Usage
 
+## Requirements
+For model training and evaluation:
+- Python@3.8
+- Pytorch 1.13.1 (CPU only)
+- Pytorch Geometric
+
+For data extraction:
+- Kotlin 1.15.10
+- JVM >= 11
+
+Time requirements:
+- For data extraction multiple days depending on the repository size (tested with c4.4xlarge EC2)
+- For model training (about 1 hour on g4dn EC2 or 8 hours on MacBook Pro 2019)
+
+
 ## Run via Docker
 
 To train and evaluate the model using a docker instance simply use:
@@ -105,7 +120,10 @@ test Accuracy:  0.821917808219178
 
 # Configuration and Parameters
 
-First of all in the beginning of main.py we can define all model training specific parameters:
+First of all in the beginning of main.py we define the trainset and testset. When the train and testset are the same (e.g. ffmpeg or qemu) we do a 70/30 split.
+Otherwise we train on the full trainset and cross evaluate on the testset (e.g. libxml2, curl, openssl, tinyproxy) 
+
+Next, we define all model training specific parameters:
 ```
 GIN_CLASSIFIER = {
     "type": "GraphClassifier",
