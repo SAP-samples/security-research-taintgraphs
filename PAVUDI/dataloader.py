@@ -1,16 +1,15 @@
-import os
 import glob
 import gzip
+import os
 import pickle
-
-from tqdm import tqdm
 from collections import defaultdict
 
-import torch
-import numpy as np
 import networkx as nx
+import numpy as np
+import torch
 import torch_geometric
 from sklearn.preprocessing import OneHotEncoder
+from tqdm import tqdm
 
 
 class ASTEncoder(object):
@@ -22,10 +21,10 @@ class ASTEncoder(object):
 
         if not os.path.exists(self.cache_dir):
             os.mkdir(self.cache_dir)
-    
+
     def _get_cache_path(self):
         return os.path.join(self.cache_dir, "asttypes.pkl.gz")
-    
+
     def _clean(self, s):
         if len(s) > 0 and s[0] == s[-1] and s[0] in ["'", '"']:
             return s[1:-1].strip()
@@ -36,7 +35,7 @@ class ASTEncoder(object):
         asttypes.append("UNKNOWN")
         self.astenc = OneHotEncoder(handle_unknown="ignore", sparse=False)
         self.astenc.fit(np.array(asttypes).reshape(-1, 1))
-        self.ast_dict = {asttype: np.squeeze(self.astenc.transform(np.array(asttype).reshape(1, -1))) 
+        self.ast_dict = {asttype: np.squeeze(self.astenc.transform(np.array(asttype).reshape(1, -1)))
                          for asttype in asttypes}
 
     def get_asttypes(self):
@@ -65,7 +64,7 @@ class ASTEncoder(object):
                             paramsplit = information.split(",")
                             ast = paramsplit[0].strip()
                             asttypes[self._clean(ast)] += 1
-        
+
         with gzip.open(self._get_cache_path(), "w") as f:
             pickle.dump(asttypes, f)
 
@@ -75,7 +74,7 @@ class ASTEncoder(object):
 def load(p, astencoder, w2v, label):
     with open(p, "r") as f:
         dot = read_dot(f, True)
-        dot.graph["label"] = torch.tensor(label) # label unknown
+        dot.graph["label"] = torch.tensor(label)  # label unknown
 
         data = encode(dot, astencoder, w2v)
 
@@ -91,7 +90,7 @@ def encode(graph, astencoder, w2v):
         node["ast"] = node["label"]
         node["lines"] = node["location"]
         node["code"] = node["enclosing"]
-    
+
     for node in graph:
         asttype = astencoder._clean(graph.nodes[node]["ast"])
         if not asttype in astencoder.ast_dict:
@@ -138,10 +137,7 @@ def _forgiving_dot_parser(content):
 
     return graph
 
-<<<<<<< HEAD
-=======
-# from: https://github.wdf.sap.corp/GRAPHXAI/SARDDataset/blob/0ac5f8f28f1cd363240b712fdd28f8461f7958f4/src/lib/utils.py#L287
->>>>>>> f2b94c9 (added PAVUDI)
+
 def from_networkx_multi(G):
     # original code: https://pytorch-geometric.readthedocs.io/en/latest/_modules/torch_geometric/utils/convert.html#from_networkx
 

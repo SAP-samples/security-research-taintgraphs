@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import glob
 import os
 import pickle
@@ -13,32 +12,12 @@ from tqdm import tqdm
 from dataloader import ASTEncoder, load
 from model import get_classification_model
 from word2vec import Word2VecBuilder
-=======
-from model import get_classification_model
-from word2vec import Word2VecBuilder
-from dataloader import ASTEncoder, load
-from torch_geometric.data import DataLoader
-import glob
-from tqdm import tqdm
-import torch.nn.functional as F
-import torch
-import os
-import pickle
-import numpy as np
-from torch.optim import Adam
-from torch_geometric.data import DataLoader, DenseDataLoader as DenseLoader
-from torch_geometric.data import Batch
->>>>>>> f2b94c9 (added PAVUDI)
 
-trainset = "ffmpeg" #ffmpeg or qemu
-testset = "ffmpeg" # ffmpeg qemu libxml2 tinyproxy curl openssl or libxml2
+trainset = "ffmpeg"  # ffmpeg or qemu
+testset = "ffmpeg"  # ffmpeg qemu libxml2 tinyproxy curl openssl or libxml2
 
 # Set up hyperparameters for the model as outlined in the paper
-<<<<<<< HEAD
 GIN_CLASSIFIER = {
-=======
-BASELINE_GIN_CLASSIFIER = {
->>>>>>> f2b94c9 (added PAVUDI)
     "type": "GraphClassifier",
     "name": "BASELINE_GIN",
     "features": 152,
@@ -61,15 +40,10 @@ BASELINE_GIN_CLASSIFIER = {
         "num_layers": 3
     }
 }
-<<<<<<< HEAD
 LR = 0.0001
 EPOCHS = 10
 
 model = get_classification_model(GIN_CLASSIFIER).encoder.node_level_encoder
-=======
-
-model = get_classification_model(BASELINE_GIN_CLASSIFIER).encoder.node_level_encoder
->>>>>>> f2b94c9 (added PAVUDI)
 
 # Configure the word2vec embedding
 w2v = Word2VecBuilder({
@@ -85,47 +59,36 @@ ast = ASTEncoder({"cache_dir": "data"})
 ast.build_astdict()
 
 # Load the samples
-<<<<<<< HEAD
 print("Loading samples, this may take a while but will be cached")
-<<<<<<< HEAD
-=======
->>>>>>> f2b94c9 (added PAVUDI)
-graphs = []
-=======
 traingraphs = []
 testgraphs = []
->>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
+
+
 def loadfile(g, label):
     name = g.split("/")[-1]
-    if os.path.exists("cache/"+name):
-        file = open("cache/"+name,'rb')
+    if os.path.exists("cache/" + name):
+        file = open("cache/" + name, 'rb')
         object_file = pickle.load(file)
         return object_file
     else:
         graphobj = load(g, ast, w2v, label)
-        with open("cache/"+name, 'wb') as fp:
+        with open("cache/" + name, 'wb') as fp:
             pickle.dump(graphobj, fp)
         return graphobj
 
-<<<<<<< HEAD
+
 print("Collecting dataset")
-<<<<<<< HEAD
-=======
->>>>>>> f2b94c9 (added PAVUDI)
-for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(dataset))):
-    graphs.append(loadfile(g, 0))
-=======
+
 for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(trainset))):
     traingraphs.append(loadfile(g, 0))
->>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
-    
+
 for g in tqdm(glob.glob("data/{}/vuln/*.cpg".format(trainset))):
     traingraphs.append(loadfile(g, 1))
 
 if not trainset == testset:
     for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(testset))):
         testgraphs.append(loadfile(g, 0))
-    
+
     for g in tqdm(glob.glob("data/{}/vuln/*.cpg".format(testset))):
         testgraphs.append(loadfile(g, 1))
     train_loader = DataLoader(traingraphs, 4, shuffle=True)
@@ -133,38 +96,22 @@ if not trainset == testset:
 else:
     # 70/20 Split for the dataset
     np.random.shuffle(traingraphs)
-    train_loader = DataLoader(traingraphs[:int(len(graphs)*70/100)], 4, shuffle=True)
-    test_loader = DataLoader(traingraphs[int(len(graphs)*70/100):], 1, shuffle=False)
+    train_loader = DataLoader(traingraphs[:int(len(traingraphs) * 70 / 100)], 4, shuffle=True)
+    test_loader = DataLoader(traingraphs[int(len(traingraphs) * 70 / 100):], 1, shuffle=False)
 
 # Initialize the bound information: If lower/upper bound has no information == 0 otherwise 1
-<<<<<<< HEAD
 print("Adding bound information")
-<<<<<<< HEAD
-=======
->>>>>>> f2b94c9 (added PAVUDI)
-for data in graphs:    
-=======
-for data in traingraphs:    
-    upper = [int(x!="\"EMPTY_STRING\"") for x in data.upperBound]
-    lower = [int(x!="\"EMPTY_STRING\"") for x in data.lowerBound]
-    data.x = torch.cat((data.x, torch.tensor(upper).view(-1,1),torch.tensor(lower).view(-1,1)), 1)
-for data in testgraphs:    
->>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
-    upper = [int(x!="\"EMPTY_STRING\"") for x in data.upperBound]
-    lower = [int(x!="\"EMPTY_STRING\"") for x in data.lowerBound]
-    data.x = torch.cat((data.x, torch.tensor(upper).view(-1,1),torch.tensor(lower).view(-1,1)), 1)
+for data in traingraphs:
+    upper = [int(x != "\"EMPTY_STRING\"") for x in data.upperBound]
+    lower = [int(x != "\"EMPTY_STRING\"") for x in data.lowerBound]
+    data.x = torch.cat((data.x, torch.tensor(upper).view(-1, 1), torch.tensor(lower).view(-1, 1)), 1)
+for data in testgraphs:
+    upper = [int(x != "\"EMPTY_STRING\"") for x in data.upperBound]
+    lower = [int(x != "\"EMPTY_STRING\"") for x in data.lowerBound]
+    data.x = torch.cat((data.x, torch.tensor(upper).view(-1, 1), torch.tensor(lower).view(-1, 1)), 1)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 # 70/20 Split for the dataset
-=======
-# 80/20 Split for the dataset
->>>>>>> f2b94c9 (added PAVUDI)
-np.random.shuffle(graphs)
-train_loader = DataLoader(graphs[:int(len(graphs)*70/100)], 4, shuffle=True)
-test_loader = DataLoader(graphs[int(len(graphs)*70/100):], 1, shuffle=False)
-=======
->>>>>>> 67298fc (added time requirements, dataset cross evaluation and more datasets)
 
 def train(model, optimizer, loader, device):
     # Training Loop
@@ -174,16 +121,15 @@ def train(model, optimizer, loader, device):
     total_loss_o = 0
     total_loss_co = 0
     correct_o = 0
-    
+
     for it, data in tqdm(enumerate(loader)):
-        
         optimizer.zero_grad()
         data = data.to(device)
 
         one_hot_target = data.y.view(-1)
         c_logs, o_logs, co_logs = model(data)
         uniform_target = torch.ones_like(c_logs, dtype=torch.float).to(device) / 2
-        
+
         c_loss = F.kl_div(c_logs, uniform_target, reduction='batchmean')
         o_loss = F.nll_loss(o_logs, one_hot_target)
         co_loss = F.nll_loss(co_logs, one_hot_target)
@@ -197,7 +143,7 @@ def train(model, optimizer, loader, device):
         total_loss_o += o_loss.item() * 4
         total_loss_co += co_loss.item() * 4
         optimizer.step()
-    
+
     num = len(loader.dataset)
     total_loss = total_loss / num
     total_loss_c = total_loss_c / num
@@ -205,6 +151,7 @@ def train(model, optimizer, loader, device):
     total_loss_co = total_loss_co / num
     correct_o = correct_o / num
     return total_loss, total_loss_c, total_loss_o, total_loss_co, correct_o
+
 
 def eval_acc(model, loader, device):
     model.eval()
@@ -216,8 +163,8 @@ def eval_acc(model, loader, device):
         with torch.no_grad():
             c_logs, o_logs, co_logs = model(data)
             pred = co_logs.max(1)[1]
-            pred_c = c_logs.max(1)[1] 
-            pred_o = o_logs.max(1)[1] 
+            pred_c = c_logs.max(1)[1]
+            pred_o = o_logs.max(1)[1]
         correct += pred.eq(data.y.view(-1)).sum().item()
         correct_c += pred_c.eq(data.y.view(-1)).sum().item()
         correct_o += pred_o.eq(data.y.view(-1)).sum().item()
@@ -227,7 +174,7 @@ def eval_acc(model, loader, device):
     acc_o = correct_o / len(loader.dataset)
     return acc_co, acc_c, acc_o
 
-<<<<<<< HEAD
+
 # Train PAVUDI
 print("Start Training")
 optimizer = Adam(model.parameters(), lr=LR)
@@ -239,11 +186,3 @@ print("training performance Loss: ", train_loss, " Accuracy: ", train_acc)
 print("test Accuracy: ", test_acc)
 
 torch.save(model, "model.model")
-=======
-optimizer = Adam(model.parameters(), lr=0.0001)
-for epoch in range(1, 100):
-    train_loss, loss_c, loss_o, loss_co, train_acc = train(model, optimizer, train_loader, "cpu")
-    test_acc, test_acc_c, test_acc_o = eval_acc(model, test_loader, "cpu")
-    print("train stuff", train_loss, loss_c, loss_o, loss_co, train_acc)
-    print("test stuff", test_acc, test_acc_c, test_acc_o)
->>>>>>> f2b94c9 (added PAVUDI)
