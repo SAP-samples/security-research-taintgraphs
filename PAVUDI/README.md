@@ -26,6 +26,9 @@ Time requirements:
 - For data extraction multiple days depending on the repository size (tested with c4.4xlarge EC2)
 - For model training (about 1 hour on g4dn EC2 or 8 hours on MacBook Pro 2019)
 
+## Preparations
+
+Download the dataset from https://drive.google.com/file/d/1gKJ3RCG97igLX0JSV8FMWLRJv4Wygzg4/view?usp=sharing and place it to the data folder.
 
 ## Run via Docker
 
