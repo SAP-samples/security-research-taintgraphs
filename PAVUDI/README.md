@@ -1,5 +1,6 @@
 # PAVUDI Model and Data
 
+<<<<<<< HEAD
 Here lies the PAVUDI model and dataset for the paper "PAVUDI: Patch-based Vulnerability Discovery
 using Machine Learning" submitted to the ACSAC'23 conference.
 
@@ -23,12 +24,30 @@ docker run pavudi
 ## Run without Docker
 
 We used Python@3.8 on a MacBook Pro 2020 and Ubuntu g4dn EC2 instance.
+=======
+Here lies the PAVUDI model and FFmpeg and QEMU data for the paper "PAVUDI: Patch-based Vulnerability Discovery
+using Machine Learning" submitted to the ACSAC'23 conference.
+
+PAVUDI is a causal graph isomorphism network trained on tained graphs to detect vulnerabilities inside patches.
+
+Disclaimer: 
+The data extraction takes some time, hence we publish the dataset here containing the FFmpeg and QEMU taintgraphs.
+The training and data preprocessing pipeline may also take a while.
+
+## Install
+
+We used Python@3.8 on a Mac os X and Ubuntu EC2 instance.
+>>>>>>> f2b94c9 (added PAVUDI)
 
 - Install Python requirements
 ```
 python3.8 -m venv env
 source env/bin/activate
+<<<<<<< HEAD
 pip3 install torch==1.13.1  --index-url https://download.pytorch.org/whl/cpu
+=======
+pip3 install torch==1.13.1
+>>>>>>> f2b94c9 (added PAVUDI)
 pip3 install -r requirements.txt
 ```
 
@@ -37,15 +56,24 @@ pip3 install -r requirements.txt
 ```
 cd data
 unzip dataset.zip
+<<<<<<< HEAD
 ```
 
 Running the preprocessing and training step via:
+=======
+``
+
+## Run the model
+
+Running the preprocessing and training steo via:
+>>>>>>> f2b94c9 (added PAVUDI)
 ```
 python3.8 main.py
 ```
 effectively loads the data, preprocesses (and caches) it and finally trains and evaluates the model.
 
 
+<<<<<<< HEAD
 ## Expected Output
 The model is trained on the provided data and the balanced accuracy will be reported at the end and the trained model stored. The command line output could resemble something like this:
 ```
@@ -161,4 +189,10 @@ build/install/security-research-taintgraphs/bin/security-research-taintgraphs --
 - causalmodel.py : CGIN Implementation
 - requirements.txt : needed Python libs
 - word2vec.py : Word2Vec model management
+=======
+## Extracting the data
+
+The taint graphs can be extracted from the parent project. We recommend using the Memgraph database.
+Follow the instruction from the readme from the parent directory and use the respective ffmpeg.txt or qemu.txt from the data folder.
+>>>>>>> f2b94c9 (added PAVUDI)
 

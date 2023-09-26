@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import glob
 import os
 import pickle
@@ -12,12 +13,32 @@ from tqdm import tqdm
 from dataloader import ASTEncoder, load
 from model import get_classification_model
 from word2vec import Word2VecBuilder
+=======
+from model import get_classification_model
+from word2vec import Word2VecBuilder
+from dataloader import ASTEncoder, load
+from torch_geometric.data import DataLoader
+import glob
+from tqdm import tqdm
+import torch.nn.functional as F
+import torch
+import os
+import pickle
+import numpy as np
+from torch.optim import Adam
+from torch_geometric.data import DataLoader, DenseDataLoader as DenseLoader
+from torch_geometric.data import Batch
+>>>>>>> f2b94c9 (added PAVUDI)
 
 # Which dataset? ffmpeg or qemu
 dataset = "ffmpeg"
 
 # Set up hyperparameters for the model as outlined in the paper
+<<<<<<< HEAD
 GIN_CLASSIFIER = {
+=======
+BASELINE_GIN_CLASSIFIER = {
+>>>>>>> f2b94c9 (added PAVUDI)
     "type": "GraphClassifier",
     "name": "BASELINE_GIN",
     "features": 152,
@@ -40,10 +61,15 @@ GIN_CLASSIFIER = {
         "num_layers": 3
     }
 }
+<<<<<<< HEAD
 LR = 0.0001
 EPOCHS = 10
 
 model = get_classification_model(GIN_CLASSIFIER).encoder.node_level_encoder
+=======
+
+model = get_classification_model(BASELINE_GIN_CLASSIFIER).encoder.node_level_encoder
+>>>>>>> f2b94c9 (added PAVUDI)
 
 # Configure the word2vec embedding
 w2v = Word2VecBuilder({
@@ -59,7 +85,10 @@ ast = ASTEncoder({"cache_dir": "data"})
 ast.build_astdict()
 
 # Load the samples
+<<<<<<< HEAD
 print("Loading samples, this may take a while but will be cached")
+=======
+>>>>>>> f2b94c9 (added PAVUDI)
 graphs = []
 def loadfile(g, label):
     name = g.split("/")[-1]
@@ -73,7 +102,10 @@ def loadfile(g, label):
             pickle.dump(graphobj, fp)
         return graphobj
 
+<<<<<<< HEAD
 print("Collecting dataset")
+=======
+>>>>>>> f2b94c9 (added PAVUDI)
 for g in tqdm(glob.glob("data/{}/benign/*.cpg".format(dataset))):
     graphs.append(loadfile(g, 0))
     
@@ -81,13 +113,20 @@ for g in tqdm(glob.glob("data/{}/vuln/*.cpg".format(dataset))):
     graphs.append(loadfile(g, 1))
 
 # Initialize the bound information: If lower/upper bound has no information == 0 otherwise 1
+<<<<<<< HEAD
 print("Adding bound information")
+=======
+>>>>>>> f2b94c9 (added PAVUDI)
 for data in graphs:    
     upper = [int(x!="\"EMPTY_STRING\"") for x in data.upperBound]
     lower = [int(x!="\"EMPTY_STRING\"") for x in data.lowerBound]
     data.x = torch.cat((data.x, torch.tensor(upper).view(-1,1),torch.tensor(lower).view(-1,1)), 1)
 
+<<<<<<< HEAD
 # 70/20 Split for the dataset
+=======
+# 80/20 Split for the dataset
+>>>>>>> f2b94c9 (added PAVUDI)
 np.random.shuffle(graphs)
 train_loader = DataLoader(graphs[:int(len(graphs)*70/100)], 4, shuffle=True)
 test_loader = DataLoader(graphs[int(len(graphs)*70/100):], 1, shuffle=False)
@@ -153,6 +192,7 @@ def eval_acc(model, loader, device):
     acc_o = correct_o / len(loader.dataset)
     return acc_co, acc_c, acc_o
 
+<<<<<<< HEAD
 # Train PAVUDI
 print("Start Training")
 optimizer = Adam(model.parameters(), lr=LR)
@@ -164,3 +204,11 @@ print("training performance Loss: ", train_loss, " Accuracy: ", train_acc)
 print("test Accuracy: ", test_acc)
 
 torch.save(model, "model.model")
+=======
+optimizer = Adam(model.parameters(), lr=0.0001)
+for epoch in range(1, 100):
+    train_loss, loss_c, loss_o, loss_co, train_acc = train(model, optimizer, train_loader, "cpu")
+    test_acc, test_acc_c, test_acc_o = eval_acc(model, test_loader, "cpu")
+    print("train stuff", train_loss, loss_c, loss_o, loss_co, train_acc)
+    print("test stuff", test_acc, test_acc_c, test_acc_o)
+>>>>>>> f2b94c9 (added PAVUDI)

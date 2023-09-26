@@ -138,6 +138,10 @@ def _forgiving_dot_parser(content):
 
     return graph
 
+<<<<<<< HEAD
+=======
+# from: https://github.wdf.sap.corp/GRAPHXAI/SARDDataset/blob/0ac5f8f28f1cd363240b712fdd28f8461f7958f4/src/lib/utils.py#L287
+>>>>>>> f2b94c9 (added PAVUDI)
 def from_networkx_multi(G):
     # original code: https://pytorch-geometric.readthedocs.io/en/latest/_modules/torch_geometric/utils/convert.html#from_networkx
 
