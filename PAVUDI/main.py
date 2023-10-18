@@ -111,7 +111,7 @@ for data in testgraphs:
     data.x = torch.cat((data.x, torch.tensor(upper).view(-1, 1), torch.tensor(lower).view(-1, 1)), 1)
 
 
-# 70/20 Split for the dataset
+# 70/30 Split for the dataset
 
 def train(model, optimizer, loader, device):
     # Training Loop
