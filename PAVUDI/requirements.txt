@@ -30,7 +30,7 @@ json5==0.9.11
 jsonschema==4.17.3
 jupyter==1.0.0
 jupyter-console==6.4.4
-jupyter-server==1.23.4
+jupyter-server==2.11.2
 jupyter_client==7.4.8
 jupyter_core==4.12.0
 jupyterlab==3.6.8
