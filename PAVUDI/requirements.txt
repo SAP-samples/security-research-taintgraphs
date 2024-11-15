@@ -102,5 +102,5 @@ wcwidth==0.2.5
 webencodings==0.5.1
 websocket-client==1.4.2
 widgetsnbextension==4.0.5
-zipp==3.11.0
+zipp==3.19.1
 git+https://github.com/pyg-team/pyg-lib.git
