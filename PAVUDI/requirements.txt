@@ -16,7 +16,7 @@ defusedxml==0.7.1
 entrypoints==0.4
 fastjsonschema==2.16.2
 gensim==4.2.0
-idna==3.4
+idna==3.7
 importlib-metadata==6.0.0
 importlib-resources==5.10.2
 ipykernel==6.16.2
